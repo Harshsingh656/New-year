@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cursive', Arial, sans-serif;
+            text-align: center;
+            background: radial-gradient(circle, #ff9a9e, #fad0c4, #fbc2eb);
+            color: white;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 60px;
+            margin-top: 20px;
+            animation: fadeIn 2s ease-in-out;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        p {
+            font-size: 20px;
+            margin: 20px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .dog-container {
+            position: relative;
+            width: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+        .dog-container img {
+            width: 100%;
+            border-radius: 50%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dog-container img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background: #8e44ad;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            animation: fadeIn 3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background: #9b59b6;
+            transform: scale(1.1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    <audio id="bg-music" src="tum_hi_ho.mp3" autoplay loop></audio>
+    <h1>Happy New Year, Mom!</h1>
+    <p>Dear Mom,</p>
+    <p>Thank you for being the brightest star in my life. Here's to a year filled with love, joy, and cherished moments with you!</p>
+    <div class="dog-container" onclick="showMessage()">
+        <img src="cutedog.png" alt="Cute Dog">
+    </div>
+    <button onclick="toggleMusic()">Toggle Music</button>
+    <script>
+        function showMessage() {
+            alert("Mom, you're my world! Happy New Year to the most amazing person in my life. Love you forever! 🎉");
+        }
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+        // Particle effect
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < 100; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.3) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+    </script>
+</body>
+</html>
